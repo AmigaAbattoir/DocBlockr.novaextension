@@ -40,7 +40,7 @@ class CommentExtender {
 
         const cursorPosition = editor.selectedRange.start;
 
-        const docBlock = this.docBlocks.find(range => {
+		const docBlock = this.docBlocks.find(range => {
             return cursorPosition > range.start && cursorPosition < range.end;
         });
 
@@ -202,6 +202,10 @@ class CommentExtender {
         case "objc":
             regex = new RegExp(/^(?:[\t ]*\/\*[*!].+?\*\/[\t ]*)$/, "gms");
             break;
+        case "csharp":
+            regex = new RegExp(/^[\t ]*\/\/\/[^\n\r]*(?:[\n\r]+[\t ]*\/\/\/[^\n\r]*)*/, "gm");
+            break;
+        case "actionscript":
         case "java":
         case "javascript":
         case "jsx":

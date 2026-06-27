@@ -107,6 +107,7 @@ class LanguageParser {
                 .replace(/^[\t ]*\*[\t ]*/gm, "")
                 .trim();
             break;
+        case "actionscript":
         case "java":
         case "javascript":
         case "jsx":
@@ -272,9 +273,14 @@ class LanguageParser {
         let descSep = " ";
         let emptyLine = " *";
         let blockEnd = " */";
+		let as3SetterDocStyle = 0;
 
         // This is the language specified by the parser, not the editor’s syntax!
         switch(this.settings.language) {
+        case "actionscript":
+            addEmptyLine = config.addEmptyLineAS3;
+            as3SetterDocStyle = config.as3SetterDocStyle;
+            break;
         case "cpp":
             addEmptyLine = config.addEmptyLineCPP;
             break;
@@ -297,6 +303,7 @@ class LanguageParser {
             emptyLine = "#";
             blockEnd = "";
             break;
+        case "csharp":
         case "rust":
         case "swift":
             // Rust/Swift parser override formatDocBlock!!!

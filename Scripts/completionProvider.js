@@ -1,4 +1,6 @@
+const ActionScriptParser = require("languages/actionscript.js");
 const CPPParser = require("languages/cpp.js");
+const CSharpParser = require("languages/csharp.js");
 const JavaParser = require("languages/java.js");
 const JavaScriptParser = require("languages/javascript.js");
 const ObjCParser = require("languages/objc.js");
@@ -40,10 +42,16 @@ class CompletionProvider {
         let isEnabled = false;
 
         switch(syntax) {
+        case "actionscript":
+            isEnabled = this.config.enableAS3
+            break;
         case "c":
         case "cpp":
         case "lsl":
             isEnabled = this.config.enableCPP;
+            break;
+        case "csharp":
+            isEnabled = this.config.enableCSharp;
             break;
         case "java":
             isEnabled = this.config.enableJava;
@@ -95,6 +103,7 @@ class CompletionProvider {
             this.triggerChars = "/**";
             isTagCompletion = line.match(/^\*\s+@/);
             break;
+        case "actionscript":
         case "javascript":
         case "jsx":
             this.triggerChars = "/**";
@@ -111,6 +120,10 @@ class CompletionProvider {
         case "ruby":
             this.triggerChars = "##";
             isTagCompletion = line.match(/^#\s+@/);
+            break;
+        case "csharp":
+            this.triggerChars = "///";
+            isTagCompletion = line.match(/^\/{3}\s*</);
             break;
         case "rust":
             this.triggerChars = "///";
@@ -163,10 +176,16 @@ class CompletionProvider {
         let parser;
 
         switch (syntax) {
+        case "actionscript":
+            parser = new ActionScriptParser(this.config);
+            break;
         case "c":
         case "cpp":
         case "lsl":
             parser = new CPPParser(this.config);
+            break;
+        case "csharp":
+            parser = new CSharpParser(this.config);
             break;
         case "java":
             parser = new JavaParser();
@@ -485,6 +504,14 @@ class CompletionProvider {
                 syntax === "rust" || syntax === "swift"
             ) {
                 snippet = " " + match[0] + match[1];
+            } else if (syntax === "csharp") {
+                if((match[1] !== ">") && (match[1].endsWith("/>"))) {
+                    // Handles self closing tags
+                    snippet = match[0] + match[1];
+                } else {
+                    // Otherwise, close the tag
+                    snippet = match[0] + match[1] + "</" + match[0] + ">";
+                }
             } else {
                 snippet = match[0] + (match[1] ? " " + match[1] : "");
             }

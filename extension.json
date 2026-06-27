@@ -3,7 +3,7 @@
     "name": "DocBlockr",
     "organization": "Hendrik Meinl",
     "description": "Nova extension to make writing documentation easier",
-    "version": "0.9.4",
+    "version": "0.9.5",
     "categories": ["completions", "commands"],
     "bugs": "https://github.com/maxgrafik/DocBlockr.novaextension/issues",
     "repository": "https://github.com/maxgrafik/DocBlockr.novaextension",
@@ -12,8 +12,10 @@
     "main": "main.js",
 
     "activationEvents": [
+        "onLanguage:actionscript",
         "onLanguage:c",
         "onLanguage:cpp",
+        "onLanguage:csharp",
         "onLanguage:java",
         "onLanguage:javascript",
         "onLanguage:jsx",
@@ -34,7 +36,7 @@
                 "command": "maxgrafik.DocBlockr.cmd.insertDocBlock",
                 "when": "editorHasFocus && !editorHasSelection",
                 "filters": {
-                    "syntaxes": ["c", "cpp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "rust", "swift", "typescript", "tsx"]
+                    "syntaxes": ["actionscript3", "c", "cpp", "csharp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "rust", "swift", "typescript", "tsx"]
                 }
             },
             {
@@ -42,7 +44,7 @@
                 "command": "maxgrafik.DocBlockr.cmd.formatDocBlock",
                 "when": "editorHasFocus",
                 "filters": {
-                    "syntaxes": ["c", "cpp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "typescript", "tsx"]
+                    "syntaxes": ["actionscript3", "c", "cpp", "csharp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "typescript", "tsx"]
                 }
             }
         ],
@@ -53,7 +55,7 @@
                 "shortcut": "return",
                 "when": "editorHasFocus && !editorHasSelection && maxgrafik.DocBlockr.evt.keyReturn",
                 "filters": {
-                    "syntaxes": ["c", "cpp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "rust", "swift", "typescript", "tsx"]
+                    "syntaxes": ["actionscript3", "c", "cpp", "csharp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "rust", "swift", "typescript", "tsx"]
                 }
             },
             {
@@ -62,7 +64,7 @@
                 "shortcut": "tab",
                 "when": "editorHasFocus && !editorHasSelection && maxgrafik.DocBlockr.evt.keyTab",
                 "filters": {
-                    "syntaxes": ["c", "cpp", "java", "javascript", "jsx", "lsl", "objc", "php", "typescript", "tsx"]
+                    "syntaxes": ["actionscript3", "c", "cpp", "csharp", "java", "javascript", "jsx", "lsl", "objc", "php", "typescript", "tsx"]
                 }
             }
         ]
@@ -76,8 +78,20 @@
             "type": "section",
             "children": [
                 {
+                    "key": "maxgrafik.DocBlockr.config.enableAS3",
+                    "title": "ActionScript 3",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
                     "key": "maxgrafik.DocBlockr.config.enableCPP",
                     "title": "C/C++",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "key": "maxgrafik.DocBlockr.config.enableCSharp",
+                    "title": "C#",
                     "type": "boolean",
                     "default": true
                 },
@@ -136,6 +150,14 @@
             "title": "Format Settings",
             "type": "section",
             "children": [
+                {
+                    "key": "maxgrafik.DocBlockr.config.addEmptyLineAS3",
+                    "title": "ActionScript 3",
+                    "type": "enum",
+                    "values": [[1, "Add empty line after summary"], [2, "Add empty line between sections"], [0, "Don’t add empty lines"]],
+                    "default": 1,
+                    "radio": false
+                },
                 {
                     "key": "maxgrafik.DocBlockr.config.addEmptyLineCPP",
                     "title": "C/C++",
@@ -208,6 +230,14 @@
                     "values": [[0, "RDoc"], [1, "YARD"]],
                     "default": 1,
                     "radio": false
+                },
+                {
+                    "key": "maxgrafik.DocBlockr.config.setterDocStyle",
+                    "title": "Setter Documentation Style",
+                    "type": "enum",
+                    "description": "ASDoc standards say you should mark it as private for building ASDoc, however, in Nova (and other IDEs) providing more context will show in the hover over.",
+                    "values": [[0, "ASDoc (private marker only)"], [1, "Param documentation"]],
+                    "default": 0
                 }
             ]
         },
@@ -262,8 +292,24 @@
             "type": "section",
             "children": [
                 {
+                    "key": "maxgrafik.DocBlockr.workspace.enableAS3",
+                    "title": "ActionScript 3",
+                    "type": "enum",
+                    "values": [[null, "Use global settings"], [true, "Enabled"], [false, "Disabled"]],
+                    "radio": false,
+                    "default": null
+                },
+                {
                     "key": "maxgrafik.DocBlockr.workspace.enableCPP",
                     "title": "C/C++",
+                    "type": "enum",
+                    "values": [[null, "Use global settings"], [true, "Enabled"], [false, "Disabled"]],
+                    "radio": false,
+                    "default": null
+                },
+                {
+                    "key": "maxgrafik.DocBlockr.workspace.enableCSharp",
+                    "title": "C#",
                     "type": "enum",
                     "values": [[null, "Use global settings"], [true, "Enabled"], [false, "Disabled"]],
                     "radio": false,
@@ -341,8 +387,24 @@
             "type": "section",
             "children": [
                 {
+                    "key": "maxgrafik.DocBlockr.workspace.addEmptyLineAS3",
+                    "title": "ActionScript 3",
+                    "type": "enum",
+                    "values": [[null, "Use global settings"], [1, "Add empty line after summary"], [2, "Add empty line between sections"], [0, "Don’t add empty lines"]],
+                    "radio": false,
+                    "default": null
+                },
+                {
                     "key": "maxgrafik.DocBlockr.workspace.addEmptyLineCPP",
                     "title": "C/C++",
+                    "type": "enum",
+                    "values": [[null, "Use global settings"], [1, "Add empty line after summary"], [2, "Add empty line between sections"], [0, "Don’t add empty lines"]],
+                    "radio": false,
+                    "default": null
+                },
+                {
+                    "key": "maxgrafik.DocBlockr.workspace.addEmptyLineCSharp",
+                    "title": "C#",
                     "type": "enum",
                     "values": [[null, "Use global settings"], [1, "Add empty line after summary"], [2, "Add empty line between sections"], [0, "Don’t add empty lines"]],
                     "radio": false,
@@ -386,6 +448,13 @@
                     "type": "enum",
                     "values": [[null, "Use global settings"], [1, "Add empty line after summary"], [2, "Add empty line between sections"], [0, "Don’t add empty lines"]],
                     "radio": false,
+                    "default": null
+                },
+                {
+                    "key": "maxgrafik.DocBlockr.workspace.as3SetterDocStyle",
+                    "title": "ActionScript 3 Setter Documentation Style",
+                    "type": "enum",
+                    "values": [[null, "Use global settings"], [0, "ASDoc (private marker only)"], [1, "Param documentation"]],
                     "default": null
                 },
                 {

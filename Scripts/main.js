@@ -5,7 +5,9 @@ const CommentExtender = require("commentExtender.js");
 const CommandHandler = require("commandHandler.js");
 
 const config = {
+    enableAS3   : true,
     enableCPP   : true,
+    enableCSharp: true,
     enableJava  : true,
     enableJS    : true,
     enableObjC  : true,
@@ -14,18 +16,20 @@ const config = {
     enableRust  : true,
     enableSwift : true,
     enableTS    : true,
-    addEmptyLineCPP  : 1,
-    addEmptyLineJava : 1,
-    addEmptyLineJS   : 0,
-    addEmptyLineObjC : 1,
-    addEmptyLinePHP  : 2,
-    addEmptyLineTS   : 0,
+    addEmptyLineAS3    : 0,
+    addEmptyLineCPP    : 1,
+    addEmptyLineJava   : 1,
+    addEmptyLineJS     : 0,
+    addEmptyLineObjC   : 1,
+    addEmptyLinePHP    : 2,
+    addEmptyLineTS     : 0,
     alignTags : 0,
     commentStyle : 0,
     commentStyleRuby : 1,
     extendComments : false,
     bookmarkComments : false,
-    ESLintComments : false
+    ESLintComments : false,
+	AS3SetterDocStyle : 0
 };
 
 exports.activate = function() {
@@ -63,7 +67,7 @@ exports.activate = function() {
      * Register Completion Assistant
      */
     nova.assistants.registerCompletionAssistant(
-        ["c", "cpp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "rust", "swift", "typescript", "tsx"],
+        ["actionscript", "c", "cpp", "csharp", "java", "javascript", "jsx", "lsl", "objc", "php", "ruby", "rust", "swift", "typescript", "tsx"],
         new CompletionProvider(config),
         {
             triggerChars: new Charset("*@-#!/\\")
@@ -133,10 +137,16 @@ function registerCommentExtender() {
              */
 
             switch(editor.document.syntax) {
+            case "actionscript":
+                isEnabled = config.enableAS3;
+                break;
             case "c":
             case "cpp":
             case "lsl":
                 isEnabled = config.enableCPP;
+                break;
+            case "csharp":
+                isEnabled = config.enableCSharp;
                 break;
             case "java":
                 isEnabled = config.enableJava;

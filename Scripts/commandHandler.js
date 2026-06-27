@@ -1,4 +1,6 @@
+const ActionScriptParser = require("languages/actionscript.js");
 const CPPParser = require("languages/cpp.js");
+const CSharpParser = require("languages/csharp.js");
 const JavaParser = require("languages/java.js");
 const JavaScriptParser = require("languages/javascript.js");
 const ObjCParser = require("languages/objc.js");
@@ -32,6 +34,7 @@ class CommandHandler {
         case "java":
             triggerChars = "/**";
             break;
+        case "actionscript":
         case "javascript":
         case "jsx":
             triggerChars = "/**";
@@ -49,6 +52,9 @@ class CommandHandler {
             triggerChars = "///";
             break;
         case "swift":
+            triggerChars = "///";
+            break;
+        case "csharp":
             triggerChars = "///";
             break;
         case "typescript":
@@ -139,6 +145,10 @@ class CommandHandler {
             // negative lookahead (?!/*[*!]) to not match unfinished docblocks
             regex = new RegExp(/^[\t ]*\/\*[*!](?:(?!\/\*[*!]).)+?\*\/[\t ]*$/, "gms");
             break;
+        case "csharp":
+            regex = new RegExp(/^[\t ]*\/\/\/[^\n\r]*(?:[\n\r]+[\t ]*\/\/\/[^\n\r]*)*/, "gm");
+            break;
+        case "actionscript":
         case "java":
         case "javascript":
         case "jsx":
@@ -186,10 +196,16 @@ class CommandHandler {
 
         let parser;
         switch (editor.document.syntax) {
+        case "actionscript":
+            parser = new ActionScriptParser(this.config);
+            break;
         case "c":
         case "cpp":
         case "lsl":
             parser = new CPPParser(this.config);
+            break;
+        case "csharp":
+            parser = new CSharpParser(this.config);
             break;
         case "java":
             parser = new JavaParser();

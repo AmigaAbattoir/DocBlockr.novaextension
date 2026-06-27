@@ -1,3 +1,9 @@
+## Version 0.9.5
+
+* Added support for ActionScript 3
+* Added support for C#
+
+
 ## Version 0.9.4
 
 * Fixed an issue where DocBlockr did not provide useful completions

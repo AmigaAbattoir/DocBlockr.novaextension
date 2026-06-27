@@ -11,7 +11,9 @@ If the line directly afterwards contains a function definition or variable decla
 To (re-)format a comment block select it (or just place the cursor inside) and select **Editor → DocBlockr → Format DocBlock**.
 
 DocBlockr for Nova currently supports
+* ActionScript 3
 * C/C++, LSL
+* C#
 * Java
 * JavaScript/JSX
 * ObjC/ObjC++
@@ -32,7 +34,7 @@ DocBlockr may additionally provide a header comment, if the cursor is at the top
 * tags only: e.g. **@author** (in which case DocBlockr adds the missing placeholders according to the specification for that tag)
 * free-form text
 
-Each of these also accept tabbable `${placeholders}` and [Nova variables](https://docs.nova.app/extensions/snippets/#variables-available-to-the-extension-api), e.g.  
+Each of these also accept tabbable `${placeholders}` and [Nova variables](https://docs.nova.app/extensions/snippets/#variables-available-to-the-extension-api), e.g.
 `@copyright ${year} $AUTHOR_NAME`
 
 
