@@ -403,14 +403,6 @@
                     "default": null
                 },
                 {
-                    "key": "maxgrafik.DocBlockr.workspace.addEmptyLineCSharp",
-                    "title": "C#",
-                    "type": "enum",
-                    "values": [[null, "Use global settings"], [1, "Add empty line after summary"], [2, "Add empty line between sections"], [0, "Don’t add empty lines"]],
-                    "radio": false,
-                    "default": null
-                },
-                {
                     "key": "maxgrafik.DocBlockr.workspace.addEmptyLineJava",
                     "title": "Java",
                     "type": "enum",
